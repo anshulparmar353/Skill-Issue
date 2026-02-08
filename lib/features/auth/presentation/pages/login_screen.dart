@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:skill_issue/utils/routes/app_go_router.dart';
-import 'package:skill_issue/utils/routes/navigation_services.dart';
-import 'package:skill_issue/utils/resusable_widgets/my_button.dart';
-import 'package:skill_issue/utils/resusable_widgets/my_text_field.dart';
+import 'package:skill_issue/core/utils/routes/app_go_router.dart';
+import 'package:skill_issue/core/utils/routes/navigation_services.dart';
+import 'package:skill_issue/core/utils/resusable_widgets/my_button.dart';
+import 'package:skill_issue/core/utils/resusable_widgets/my_text_field.dart';
 
 class LoginScreen extends StatelessWidget {
   LoginScreen({super.key});

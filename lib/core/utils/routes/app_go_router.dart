@@ -1,9 +1,9 @@
 import 'package:go_router/go_router.dart';
-import 'package:skill_issue/features/auth/view/forgot_password.dart';
-import 'package:skill_issue/features/auth/view/login_screen.dart';
-import 'package:skill_issue/features/auth/view/signup_screen.dart';
-import 'package:skill_issue/features/start_page/view/start_screen.dart';
-import 'package:skill_issue/utils/routes/navigation_services.dart';
+import 'package:skill_issue/features/auth/presentation/pages/forgot_password.dart';
+import 'package:skill_issue/features/auth/presentation/pages/login_screen.dart';
+import 'package:skill_issue/features/auth/presentation/pages/signup_screen.dart';
+import 'package:skill_issue/features/start_page/presentation/pages/start_screen.dart';
+import 'package:skill_issue/core/utils/routes/navigation_services.dart';
 
 part 'app_routes.dart';
 

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get_storage/get_storage.dart';
-import 'package:skill_issue/utils/routes/app_go_router.dart';
-import 'package:skill_issue/utils/theme/app_theme.dart';
+import 'package:skill_issue/core/utils/routes/app_go_router.dart';
+import 'package:skill_issue/core/utils/theme/app_theme.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
