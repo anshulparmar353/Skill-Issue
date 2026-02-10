@@ -8,7 +8,7 @@ class ApiEndpoints {
   static const refresh = "/auth/refresh";
 
   /// User
-  static const me = "/users/me";
+  static const currentUser = "/users/me";
 
   /// Skills
   static const skills = "/skills";

@@ -3,13 +3,13 @@ import 'package:dio/dio.dart';
 import '../network/dio_client.dart';
 import '../storage/token_storage.dart';
 
-final sl = GetIt.instance;
+final getIt = GetIt.instance;
 
 Future<void> init() async {
 
-  sl.registerLazySingleton(() => Dio());
+  getIt.registerLazySingleton(() => Dio());
   
-  sl.registerLazySingleton<TokenStorage>(() => TokenStorage());
-  sl.registerLazySingleton<DioClient>(() => DioClient(sl(), sl()));
+  getIt.registerLazySingleton<TokenStorage>(() => TokenStorage());
+  getIt.registerLazySingleton<DioClient>(() => DioClient(getIt(), getIt()));
 
 }

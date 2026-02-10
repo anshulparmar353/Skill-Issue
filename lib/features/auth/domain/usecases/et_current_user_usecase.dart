@@ -1,0 +1,13 @@
+import 'package:skill_issue/features/auth/domain/repository/auth_repo.dart';
+import '../entities/user.dart';
+
+class GetCurrentUserUseCase {
+
+  final AuthRepository repository;
+
+  GetCurrentUserUseCase(this.repository);
+
+  Future<User> call() {
+    return repository.getCurrentUser();
+  }
+}

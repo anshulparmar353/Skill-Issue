@@ -1,14 +1,18 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:skill_issue/features/auth/domain/usecases/et_current_user_usecase.dart';
 import 'package:skill_issue/features/auth/domain/usecases/login_usecase.dart';
 import 'package:skill_issue/features/auth/presentation/bloc/auth_event.dart';
 import 'package:skill_issue/features/auth/presentation/bloc/auth_state.dart';
 
 class AuthBloc extends Bloc<AuthEvent, AuthState> {
   final LoginUseCase loginUseCase;
+  final GetCurrentUserUseCase getCurrentUserUseCase;
 
-  AuthBloc(this.loginUseCase) : super(AuthInitial()) {
+  AuthBloc(this.loginUseCase, this.getCurrentUserUseCase)
+    : super(AuthInitial()) {
     on<LoginRequested>(_onLoginRequested);
     on<LogoutRequested>(_onLogoutRequested);
+    on<CheckAuthStatus>(_onCheckAuthStatus);
   }
 
   Future<void> _onLoginRequested(
@@ -28,5 +32,19 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
 
   void _onLogoutRequested(LogoutRequested event, Emitter<AuthState> emit) {
     emit(Unauthenticated());
+  }
+
+  Future<void> _onCheckAuthStatus(
+    CheckAuthStatus event,
+    Emitter<AuthState> emit,
+  ) async {
+    emit(AuthLoading());
+
+    try {
+      final user = await getCurrentUserUseCase();
+      emit(Authenticated(user: user));
+    } catch (e) {
+      emit(Unauthenticated());
+    }
   }
 }

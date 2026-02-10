@@ -40,7 +40,9 @@ class _LoginScreenState extends State<LoginScreen> {
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       body: SafeArea(
         child: BlocConsumer<AuthBloc, AuthState>(
+
           listener: (context, state) {
+
             if (state is Authenticated) {
               context.go(AppRoutes.startscreen);
             }
@@ -53,6 +55,7 @@ class _LoginScreenState extends State<LoginScreen> {
           },
 
           builder: (context, state) {
+            
             final isLoading = state is AuthLoading;
 
             return Padding(
