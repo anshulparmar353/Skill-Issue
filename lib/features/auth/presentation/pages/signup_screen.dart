@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:skill_issue/core/utils/routes/app_go_router.dart';
-import 'package:skill_issue/core/utils/routes/navigation_services.dart';
-import 'package:skill_issue/core/utils/resusable_widgets/my_button.dart';
-import 'package:skill_issue/core/utils/resusable_widgets/my_text_field.dart';
+import 'package:skill_issue/core/routes/app_go_router.dart';
+import 'package:skill_issue/shared/widgets/my_button.dart';
+import 'package:skill_issue/shared/widgets/my_text_field.dart';
 
 class SignupScreen extends StatelessWidget {
   const SignupScreen({super.key});
@@ -71,7 +70,7 @@ class SignupScreen extends StatelessWidget {
 
                     TextButton(
                       onPressed: () {
-                        NavigationServices.navigationKey.currentContext!.go(
+                        context.go(
                           AppRoutes.loginScreen,
                         );
                       },

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:skill_issue/core/utils/resusable_widgets/my_container.dart';
-import 'package:skill_issue/core/utils/resusable_widgets/my_text.dart';
+import 'package:skill_issue/shared/widgets/my_container.dart';
+import 'package:skill_issue/shared/widgets/my_text.dart';
 
 class StartScreen extends StatelessWidget {
   const StartScreen({super.key});

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:skill_issue/core/utils/resusable_widgets/my_button.dart';
-import 'package:skill_issue/core/utils/resusable_widgets/my_text_field.dart';
+import 'package:skill_issue/shared/widgets/my_button.dart';
+import 'package:skill_issue/shared/widgets/my_text_field.dart';
 
 class ForgotPassword extends StatelessWidget {
   const ForgotPassword({super.key});

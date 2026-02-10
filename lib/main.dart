@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:get_storage/get_storage.dart';
-import 'package:skill_issue/core/utils/routes/app_go_router.dart';
-import 'package:skill_issue/core/utils/theme/app_theme.dart';
+import 'package:skill_issue/core/di/service_locator.dart';
+import 'package:skill_issue/core/storage/hive_service.dart';
+import 'package:skill_issue/core/routes/app_go_router.dart';
+import 'package:skill_issue/shared/theme/app_theme.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await GetStorage.init();                                               
+  await HiveService.init();
+  await init();                                              
 
   runApp(const MyApp());
 }
@@ -17,7 +19,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp.router(
-      debugShowCheckedModeBanner: false,
+      debugShowCheckedModeBanner: false, 
       themeMode: ThemeMode.system,
       theme: AppTheme.lightTheme,
       darkTheme: AppTheme.darkTheme,

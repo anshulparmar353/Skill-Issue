@@ -3,13 +3,11 @@ import 'package:skill_issue/features/auth/presentation/pages/forgot_password.dar
 import 'package:skill_issue/features/auth/presentation/pages/login_screen.dart';
 import 'package:skill_issue/features/auth/presentation/pages/signup_screen.dart';
 import 'package:skill_issue/features/start_page/presentation/pages/start_screen.dart';
-import 'package:skill_issue/core/utils/routes/navigation_services.dart';
 
 part 'app_routes.dart';
 
 class AppGoRouter {
   static GoRouter routes = GoRouter(
-    navigatorKey: NavigationServices.navigationKey,
     routes: [
       GoRoute(
         path: AppRoutes.loginScreen,

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:skill_issue/core/utils/resusable_widgets/my_button.dart';
-import 'package:skill_issue/core/utils/theme/app_colors.dart';
+import 'package:skill_issue/shared/widgets/my_button.dart';
+import 'package:skill_issue/shared/theme/app_colors.dart';
 
 class MyContainer extends StatelessWidget {
   const MyContainer({
