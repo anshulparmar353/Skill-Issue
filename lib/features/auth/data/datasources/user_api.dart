@@ -1,6 +1,7 @@
+import 'package:skill_issue/features/auth/data/models/auth_response_model.dart';
+
 import '../../../../core/network/dio_client.dart';
 import '../../../../core/network/api_endpoints.dart';
-import '../models/user_model.dart';
 
 class UserApi {
 
@@ -8,12 +9,12 @@ class UserApi {
 
   UserApi(this.dioClient);
 
-  Future<UserModel> getCurrentUser() async {
+  Future<AuthResponseModel> getCurrentUser() async {
 
     final response = await dioClient.dio.get(
       ApiEndpoints.currentUser,
     );
 
-    return UserModel.fromJson(response.data);
+    return AuthResponseModel.fromJson(response.data);
   }
 }

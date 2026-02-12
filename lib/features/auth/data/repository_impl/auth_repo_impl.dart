@@ -1,12 +1,11 @@
 import 'package:skill_issue/features/auth/data/datasources/auth_api.dart';
 import 'package:skill_issue/features/auth/data/datasources/user_api.dart';
+import 'package:skill_issue/features/auth/data/models/auth_result.dart';
 import 'package:skill_issue/features/auth/domain/repository/auth_repo.dart';
 
-import '../../domain/entities/user.dart';
 import '../../../../core/storage/token_storage.dart';
 
 class AuthRepoImpl implements AuthRepository {
-
   final AuthApi api;
   final UserApi userApi;
   final TokenStorage tokenStorage;
@@ -14,7 +13,10 @@ class AuthRepoImpl implements AuthRepository {
   AuthRepoImpl(this.api, this.userApi, this.tokenStorage);
 
   @override
-  Future<User> login({required String email, required String password}) async {
+  Future<AuthResult> login({
+    required String email,
+    required String password,
+  }) async {
     final response = await api.login(email: email, password: password);
 
     await tokenStorage.saveTokens(
@@ -22,12 +24,12 @@ class AuthRepoImpl implements AuthRepository {
       refresh: response.refreshToken,
     );
 
-    return response.user;
+    return AuthResult(user: response.user, isNewUser: response.isNewUser);
   }
 
   @override
-  Future<User> getCurrentUser() async {
-    final user = await userApi.getCurrentUser();
-    return user;
+  Future<AuthResult> getCurrentUser() async {
+    final result = await userApi.getCurrentUser();
+    return AuthResult(user: result.user, isNewUser: result.isNewUser);
   }
 }

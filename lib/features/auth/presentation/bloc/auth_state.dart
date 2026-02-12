@@ -12,11 +12,12 @@ class AuthLoading extends AuthState {}
 
 class Authenticated extends AuthState {
   final User user;
+  final bool isNewUser;
 
-  Authenticated({required this.user});
+  Authenticated({required this.user, required this.isNewUser});
 
   @override
-  List<Object?> get props => [user];
+  List<Object?> get props => [user,isNewUser];
 }
 
 class Unauthenticated extends AuthState {}

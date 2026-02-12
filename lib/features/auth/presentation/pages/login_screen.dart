@@ -36,15 +36,20 @@ class _LoginScreenState extends State<LoginScreen> {
 
   @override
   Widget build(BuildContext context) {
+    
     return Scaffold(
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       body: SafeArea(
         child: BlocConsumer<AuthBloc, AuthState>(
-
           listener: (context, state) {
-
             if (state is Authenticated) {
-              context.go(AppRoutes.startscreen);
+
+              if (state.isNewUser) {
+                return context.go(AppRoutes.addSkillsScreen);
+              } else {
+                return context.go(AppRoutes.dashboardScreen);
+              }
+              
             }
 
             if (state is AuthError) {
@@ -55,7 +60,6 @@ class _LoginScreenState extends State<LoginScreen> {
           },
 
           builder: (context, state) {
-            
             final isLoading = state is AuthLoading;
 
             return Padding(

@@ -1,4 +1,4 @@
-import 'user_model.dart';
+import 'package:skill_issue/features/auth/data/models/user_model.dart';
 
 class AuthResponseModel {
 
@@ -11,7 +11,7 @@ class AuthResponseModel {
     required this.accessToken,
     required this.refreshToken,
     required this.user,
-    required this.isNewUser
+    required this.isNewUser,
   });
 
   factory AuthResponseModel.fromJson(Map<String, dynamic> json) {

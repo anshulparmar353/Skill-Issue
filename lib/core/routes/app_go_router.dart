@@ -3,7 +3,9 @@ import 'package:skill_issue/features/auth/presentation/bloc/auth_notifier.dart';
 import 'package:skill_issue/features/auth/presentation/pages/forgot_password.dart';
 import 'package:skill_issue/features/auth/presentation/pages/login_screen.dart';
 import 'package:skill_issue/features/auth/presentation/pages/signup_screen.dart';
-import 'package:skill_issue/features/start_page/presentation/pages/start_screen.dart';
+import 'package:skill_issue/features/dashboard/presentation/pages/dashboard_page.dart';
+import 'package:skill_issue/features/quiz/presentation/pages/quiz_page.dart';
+import 'package:skill_issue/features/skills/presentation/pages/add_skill.dart';
 
 part 'app_routes.dart';
 
@@ -52,9 +54,22 @@ class AppGoRouter {
         ),
 
         GoRoute(
-          path: AppRoutes.startscreen,
-          builder: (context, state) => StartScreen(),
+          path: AppRoutes.addSkillsScreen,
+          builder: (context, state) => AddSkill(),
         ),
+
+        GoRoute(
+          path: AppRoutes.quizScreen,
+          builder: (context, state) => QuizPage(),
+        ),
+
+        GoRoute(
+          path: AppRoutes.dashboardScreen,
+          builder: (context, state) => DashboardPage(),
+        ),
+
+        
+
       ],
     );
   }

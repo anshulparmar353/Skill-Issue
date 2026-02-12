@@ -8,6 +8,9 @@ abstract class AppRoutes {
   static const signupScreen = '/signup-screen';
   static const forgotPasswordScreen = '/forgot-password-screen';
 
-  static const startscreen = '/start-screen';
+  static const addSkillsScreen = '/add-skills-screen';
+  static const quizScreen = '/quiz-screen';
+
+  static const dashboardScreen = '/dashboard-screen';
 
 }
