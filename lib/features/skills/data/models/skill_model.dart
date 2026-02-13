@@ -1,31 +1,32 @@
-import 'package:skill_issue/features/skills/domain/entities/skill.dart';
-import 'package:skill_issue/features/skills/domain/entities/skill_level.dart';
+import 'package:skill_issue/features/add_skills/domain/entities/skill_level.dart';
+import '../../domain/entities/skill.dart';
 
 class SkillModel extends Skill {
 
   SkillModel({
     required super.id,
     required super.name,
-    required super.level
+    required super.level,
   });
 
-
   factory SkillModel.fromJson(Map<String, dynamic> json) {
+
     return SkillModel(
       id: json["id"].toString(),
-      name: json["name"],
+      name: json["name"] ?? "",
       level: _levelFromString(json["level"]),
     );
   }
-
 
   Map<String, dynamic> toJson() {
     return {
       "id": id,
       "name": name,
-      "level": _levelToString(level)};
+      "level": _levelToString(level),
+    };
   }
 
+  /// Enum Mapping
 
   static SkillLevel _levelFromString(String level) {
 
@@ -41,7 +42,6 @@ class SkillModel extends Skill {
     }
   }
 
-
   static String _levelToString(SkillLevel level) {
 
     switch (level) {
@@ -53,5 +53,4 @@ class SkillModel extends Skill {
         return "advanced";
     }
   }
-
 }

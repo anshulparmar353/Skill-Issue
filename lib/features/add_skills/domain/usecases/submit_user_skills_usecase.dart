@@ -1,4 +1,4 @@
-import 'package:skill_issue/features/skills/domain/repository/skills_repo.dart';
+import 'package:skill_issue/features/add_skills/domain/repository/skills_repo.dart';
 
 class SubmitUserSkillsUseCase {
 

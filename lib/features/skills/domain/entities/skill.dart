@@ -1,5 +1,4 @@
-
-import 'package:skill_issue/features/skills/domain/entities/skill_level.dart';
+import 'package:skill_issue/features/add_skills/domain/entities/skill_level.dart';
 
 class Skill {
 
@@ -13,4 +12,3 @@ class Skill {
     required this.level,
   });
 }
-

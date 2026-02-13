@@ -1,13 +1,14 @@
-import 'package:skill_issue/features/skills/domain/entities/skill.dart';
 import 'package:skill_issue/features/skills/domain/repository/skills_repo.dart';
+import '../entities/skill.dart';
 
-class GetAvailableSkillsUseCase {
+
+class GetSkillsUseCase {
 
   final SkillsRepository repo;
 
-  GetAvailableSkillsUseCase(this.repo);
+  GetSkillsUseCase(this.repo);
 
   Future<List<Skill>> call() {
-    return repo.getAvailableSkills();
+    return repo.getSkills();
   }
 }

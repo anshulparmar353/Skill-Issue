@@ -1,5 +1,5 @@
 import 'package:skill_issue/features/quiz/domain/entities/quiz_result.dart';
-import 'package:skill_issue/features/skills/domain/entities/skill_level.dart';
+import 'package:skill_issue/features/add_skills/domain/entities/skill_level.dart';
 
 class QuizResultModel extends QuizResult {
   QuizResultModel({required super.skillId, required super.level});

@@ -1,36 +1,28 @@
 import 'package:skill_issue/features/skills/domain/entities/skill.dart';
 
-class SkillsOnboardingState {
-  final List<Skill> skills;
-  final Set<String> selectedIds;
-  final bool loading;
-  final bool submitted;
+class SkillsState {
 
-  SkillsOnboardingState({
-    required this.skills,
-    required this.selectedIds,
+  final bool loading;
+  final List<Skill> skills;
+
+  SkillsState({
     required this.loading,
-    required this.submitted,
+    required this.skills,
   });
 
-  factory SkillsOnboardingState.initial() => SkillsOnboardingState(
-    skills: [],
-    selectedIds: {},
-    loading: false,
-    submitted: false,
-  );
+  factory SkillsState.initial() =>
+      SkillsState(
+        loading: false,
+        skills: [],
+      );
 
-  SkillsOnboardingState copyWith({
-    List<Skill>? skills,
-    Set<String>? selectedIds,
+  SkillsState copyWith({
     bool? loading,
-    bool? submitted,
+    List<Skill>? skills,
   }) {
-    return SkillsOnboardingState(
-      skills: skills ?? this.skills,
-      selectedIds: selectedIds ?? this.selectedIds,
+    return SkillsState(
       loading: loading ?? this.loading,
-      submitted: submitted ?? this.submitted,
+      skills: skills ?? this.skills,
     );
   }
 }

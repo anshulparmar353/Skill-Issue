@@ -1,11 +1,15 @@
-abstract class SkillsOnboardingEvent {}
+abstract class SkillsEvent {}
 
-class LoadAvailableSkills extends SkillsOnboardingEvent {}
+class LoadSkills extends SkillsEvent {}
 
-class ToggleSkillSelection extends SkillsOnboardingEvent {
-  final String skillId;
+class AddSkill extends SkillsEvent {
+  final String skillName;
 
-  ToggleSkillSelection(this.skillId);
+  AddSkill(this.skillName);
 }
 
-class SubmitSelectedSkills extends SkillsOnboardingEvent {}
+class DeleteSkill extends SkillsEvent {
+  final String skillId;
+
+  DeleteSkill(this.skillId);
+}
