@@ -2,7 +2,7 @@ import '../../domain/entities/dashboard_data.dart';
 
 class DashboardModel extends DashboardData {
 
-  DashboardModel({
+  const DashboardModel({
     required super.totalSkills,
     required super.beginner,
     required super.intermediate,

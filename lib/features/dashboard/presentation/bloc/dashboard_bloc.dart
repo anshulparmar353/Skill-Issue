@@ -15,20 +15,20 @@ class DashboardBloc extends Bloc<DashboardEvent, DashboardState> {
 
   Future<void> _load(LoadDashboard event, emit) async {
 
-    emit(DashboardState(loading: true));
+    emit(DashboardState(loading: true, error: null));
 
     try {
 
       final data = await getDashboard();
 
-      emit(DashboardState(
+      emit(state.copyWith(
         loading: false,
         data: data,
       ));
 
     } catch (e) {
 
-      emit(DashboardState(
+      emit(state.copyWith(
         loading: false,
         error: "Failed to load dashboard",
       ));

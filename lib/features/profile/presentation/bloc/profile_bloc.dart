@@ -20,24 +20,36 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
 
     emit(ProfileState(loading: true));
 
-    final profile = await getProfile();
-
-    emit(ProfileState(
-      loading: false,
-      profile: profile,
-    ));
+    try {
+      final profile = await getProfile();
+      emit(state.copyWith(
+        loading: false,
+        profile: profile,
+      ));
+    } catch (e) {
+      emit(state.copyWith(
+        loading: false,
+        error: "Failed to load profile",
+      ));
+    }
   }
 
   Future<void> _update(UpdateProfileName event, emit) async {
 
     emit(ProfileState(loading: true));
 
-    final profile = await updateProfile(name: event.name);
-
-    emit(ProfileState(
-      loading: false,
-      profile: profile,
-      updated: true,
-    ));
+    try {
+      final profile = await updateProfile(name: event.name);
+      emit(state.copyWith(
+        loading: false,
+        profile: profile,
+        updated: true,
+      ));
+    } catch (e) {
+      emit(state.copyWith(
+        loading: false,
+        error: "Failed to update profile",
+      ));
+    }
   }
 }

@@ -10,7 +10,9 @@ class ProfileRepoImpl implements ProfileRepository {
 
   @override
   Future<Profile> getProfile() async {
+
     return await api.getProfile();
+    
   }
 
   @override

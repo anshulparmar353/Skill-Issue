@@ -1,19 +1,20 @@
+import 'package:equatable/equatable.dart';
+
 import '../../domain/entities/roadmap.dart';
 
-class RoadmapState {
+class RoadmapState extends Equatable {
 
   final bool loading;
   final Roadmap? roadmap;
   final String? error;
 
-  RoadmapState({
+  const RoadmapState({
     required this.loading,
     this.roadmap,
     this.error,
   });
 
-  factory RoadmapState.initial() =>
-      RoadmapState(loading: false);
+  factory RoadmapState.initial() => RoadmapState(loading: false);
 
   RoadmapState copyWith({
     bool? loading,
@@ -26,4 +27,7 @@ class RoadmapState {
       error: error,
     );
   }
+
+  @override
+  List<Object?> get props => [loading, roadmap, error];
 }

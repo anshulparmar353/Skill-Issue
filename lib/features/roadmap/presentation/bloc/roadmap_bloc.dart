@@ -16,7 +16,7 @@ class RoadmapBloc extends Bloc<RoadmapEvent, RoadmapState> {
 
   Future<void> _load(LoadRoadmap event, emit) async {
 
-    emit(state.copyWith(loading: true));
+    emit(state.copyWith(loading: true, error: null));
 
     try {
 

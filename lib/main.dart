@@ -4,6 +4,10 @@ import 'package:skill_issue/core/di/service_locator.dart';
 import 'package:skill_issue/core/storage/hive_service.dart';
 import 'package:skill_issue/features/auth/presentation/bloc/auth_bloc.dart';
 import 'package:skill_issue/features/auth/presentation/bloc/auth_notifier.dart';
+import 'package:skill_issue/features/dashboard/presentation/bloc/dashboard_bloc.dart';
+import 'package:skill_issue/features/profile/presentation/bloc/profile_bloc.dart';
+import 'package:skill_issue/features/roadmap/presentation/bloc/roadmap_bloc.dart';
+import 'package:skill_issue/features/skills/presentation/bloc/skills_bloc.dart';
 import 'package:skill_issue/shared/theme/app_theme.dart';
 import 'package:skill_issue/core/routes/app_go_router.dart';
 
@@ -14,7 +18,13 @@ void main() async {
 
   runApp(
     MultiBlocProvider(
-      providers: [BlocProvider(create: (_) => getIt<AuthBloc>())],
+      providers: [
+        BlocProvider(create: (_) => getIt<AuthBloc>()),
+        BlocProvider(create: (_) => getIt<DashboardBloc>()),
+        BlocProvider(create: (_) => getIt<SkillsBloc>()),
+        BlocProvider(create: (_) => getIt<RoadmapBloc>()),
+        BlocProvider(create: (_) => getIt<ProfileBloc>()),
+      ],
       child: const MyApp(),
     ),
   );

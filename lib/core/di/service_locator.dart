@@ -32,7 +32,6 @@ import '../storage/token_storage.dart';
 final getIt = GetIt.instance;
 
 Future<void> init() async {
-  
   getIt.registerLazySingleton(() => Dio());
 
   getIt.registerLazySingleton<TokenStorage>(() => TokenStorage());
@@ -50,7 +49,7 @@ Future<void> init() async {
   getIt.registerLazySingleton(() => GetCurrentUserUseCase(getIt()));
 
   getIt.registerLazySingleton<AuthRepository>(
-    () => AuthRepoImpl(getIt(), getIt(), getIt()),
+    () => AuthRepoImpl(getIt(), getIt(), getIt(), getIt()),
   );
 
   getIt.registerLazySingleton(() => UserApi(getIt()));
