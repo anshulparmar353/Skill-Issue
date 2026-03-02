@@ -42,6 +42,7 @@ class _LoginScreenState extends State<LoginScreen> {
       body: SafeArea(
         child: BlocConsumer<AuthBloc, AuthState>(
           listener: (context, state) {
+            
             if (state is Authenticated) {
               if (state.isNewUser) {
                 return context.go(AppRoutes.addSkillsScreen);
@@ -107,17 +108,6 @@ class _LoginScreenState extends State<LoginScreen> {
                         ),
                       ],
                     ),
-
-                    // ElevatedButton(
-                    //   onPressed: isLoading ? null : _login,
-                    //   child: isLoading
-                    //       ? SizedBox(
-                    //           height: 20,
-                    //           width: 20,
-                    //           child: CircularProgressIndicator(strokeWidth: 2),
-                    //         )
-                    //       : Text("Sign in"),
-                    // ),
                     
                     MyButton(
                       onTap: isLoading ? null : _login,
