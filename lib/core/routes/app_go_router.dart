@@ -16,11 +16,12 @@ part 'app_routes.dart';
 class AppGoRouter {
   static GoRouter createRouter(AuthNotifier authNotifier) {
     return GoRouter(
-      initialLocation: AppRoutes.splashScreen,
+      initialLocation: AppRoutes.loginScreen,
 
       refreshListenable: authNotifier,
 
       redirect: (context, state) {
+        
         final loggedIn = authNotifier.isAuthenticated;
         final loggingIn = state.matchedLocation == AppRoutes.loginScreen;
         final isSplash = state.matchedLocation == AppRoutes.splashScreen;

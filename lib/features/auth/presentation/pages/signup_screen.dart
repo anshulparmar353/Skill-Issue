@@ -9,7 +9,7 @@ class SignupScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // final width = MediaQuery.of(context).size.width;
+   
     final TextEditingController emailcontroller = TextEditingController();
     final TextEditingController passwordcontroller = TextEditingController();
     final TextEditingController confirmpasswordcontroller =
