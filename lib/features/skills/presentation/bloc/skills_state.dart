@@ -1,37 +1,29 @@
 import 'package:equatable/equatable.dart';
 import 'package:skill_issue/features/skills/domain/entities/skill.dart';
 
-class SkillsState extends Equatable {
-
-  final bool loading;
-  final List<Skill> skills;
-  final String? error;
-
-  const SkillsState({
-    required this.loading,
-    required this.skills,
-    required this.error
-  });
-
-  factory SkillsState.initial() =>
-      SkillsState(
-        loading: false,
-        skills: [],
-        error: "",
-      );
-
-  SkillsState copyWith({
-    bool? loading,
-    List<Skill>? skills,
-    String? error,
-  }) {
-    return SkillsState(
-      loading: loading ?? this.loading,
-      skills: skills ?? this.skills,
-      error: error,
-    );
-  }
-  
+abstract class SkillsState with EquatableMixin {
   @override
-  List<Object?> get props => [loading, skills,error];
+  List<Object?> get props => [];
+}
+
+class SkillsInitial extends SkillsState {}
+
+class SkillsLoading extends SkillsState {}
+
+class SkillsLoaded extends SkillsState {
+
+  final List<Skill>? skills;
+  SkillsLoaded(this.skills);
+
+  @override
+  List<Object?> get props => [skills];
+}
+
+class SkillsError extends SkillsState {
+  final String message;
+
+  SkillsError(this.message);
+
+  @override
+  List<Object?> get props => [message];
 }

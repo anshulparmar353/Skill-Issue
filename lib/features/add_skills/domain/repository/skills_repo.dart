@@ -5,4 +5,6 @@ abstract class SkillsRepository {
   Future<List<Skill>> getAvailableSkills();
 
   Future<void> submitUserSkills(List<String> skillIds);
+
+  Future<dynamic> getSkills() async {}
 }

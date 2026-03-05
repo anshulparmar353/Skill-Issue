@@ -51,29 +51,44 @@ class SkillsPage extends StatelessWidget {
 
       body: BlocBuilder<SkillsBloc, SkillsState>(
         builder: (context, state) {
-          if (state.loading) {
+          if (state is SkillsLoading) {
             return const Center(child: CircularProgressIndicator());
           }
 
-          return ListView.builder(
-            itemCount: state.skills.length,
-            itemBuilder: (_, index) {
-              final skill = state.skills[index];
+          if (state is SkillsError) {
+            return Center(child: Text(state.message));
+          }
 
-              return Dismissible(
-                key: ValueKey(skill.id),
+          if (state is SkillsLoaded) {
+            return ListView.builder(
+              itemCount: state.skills?.length,
+              itemBuilder: (_, index) {
+                final skill = state.skills?[index];
 
-                onDismissed: (_) {
-                  context.read<SkillsBloc>().add(DeleteSkill(skill.id));
-                },
+                return Dismissible(
+                  key: ValueKey(skill?.id),
 
-                child: ListTile(
-                  title: Text(skill.name),
+                  onDismissed: (_) {
+                    context.read<SkillsBloc>().add(DeleteSkill(skill.id));
+                  },
 
-                  trailing: _levelChip(skill.level),
-                ),
-              );
-            },
+                  child: ListTile(
+                    title: Text(skill!.name),
+
+                    trailing: _levelChip(skill.level),
+                  ),
+                );
+              },
+            );
+          }
+
+          return Center(
+            child: ElevatedButton(
+              onPressed: () {
+                context.read<SkillsBloc>().add(LoadSkills());
+              },
+              child: const Text("Retry"),
+            ),
           );
         },
       ),

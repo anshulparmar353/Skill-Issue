@@ -11,53 +11,43 @@ class SkillsBloc extends Bloc<SkillsEvent, SkillsState> {
   final DeleteSkillUseCase deleteSkill;
 
   SkillsBloc(this.getSkills, this.addSkill, this.deleteSkill)
-    : super(SkillsState.initial()) {
+    : super(SkillsInitial()) {
     on<LoadSkills>(_load);
     on<AddSkill>(_add);
     on<DeleteSkill>(_delete);
   }
 
-  Future<void> _load(LoadSkills event, emit) async {
-    emit(state.copyWith(loading: true, error: null));
+  Future<void> _load(LoadSkills event,Emitter<SkillsState> emit) async {
 
-    try {
-      final skills = await getSkills();
+    emit(SkillsLoading());  
 
-      emit(state.copyWith(
-        loading: false,
-        skills: skills,
-      ));
+    final result = await getSkills();
 
-    } catch (e) {
-      emit(state.copyWith(
-        loading: false, 
-        error: "Failed to load skills",
-      ));
-    }
+    result.fold(
+      (failure) => emit(SkillsError(failure.message)),
+      (skills) => emit(SkillsLoaded(skills)),
+    );
+
   }
 
-  Future<void> _add(AddSkill event, emit) async {
+  Future<void> _add(AddSkill event,Emitter<SkillsState> emit) async {
 
     try {
       await addSkill(name: event.skillName);
       add(LoadSkills());
 
     } catch (e) {
-      emit(state.copyWith(
-        error: "Failed to add skill",
-      ));
+      emit(SkillsError("Failed to add skill"));
     }
   }
 
-  Future<void> _delete(DeleteSkill event, emit) async {
+  Future<void> _delete(DeleteSkill event,Emitter<SkillsState> emit) async {
     
     try {
       await deleteSkill(event.skillId);
       add(LoadSkills());
     } catch (e) {
-      emit(state.copyWith(
-        error: "Failed to delete skill",
-      ));
+      emit(SkillsError("Failed to delete skill"));
     }
   }
   

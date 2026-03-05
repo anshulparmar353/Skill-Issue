@@ -1,12 +1,15 @@
+import 'package:dartz/dartz.dart';
+import 'package:skill_issue/core/errors/failures.dart';
+
 import '../entities/skill.dart';
 
 abstract class SkillsRepository {
 
-  Future<List<Skill>> getSkills();
+  Future<Either<Failure, List<Skill>>> getSkills();
 
   Future<void> addSkill({
     required String name,
   });
 
-  Future<void> deleteSkill(String skillId);
+  Future<Either<Failure, Unit>> deleteSkill(String skillId);
 }

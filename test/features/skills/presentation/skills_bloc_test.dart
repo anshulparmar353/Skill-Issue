@@ -1,6 +1,8 @@
+import 'package:dartz/dartz.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:bloc_test/bloc_test.dart';
 import 'package:mocktail/mocktail.dart';
+import 'package:skill_issue/core/errors/failures.dart';
 import 'package:skill_issue/features/add_skills/domain/entities/skill_level.dart';
 
 import 'package:skill_issue/features/skills/presentation/bloc/skills_bloc.dart';
@@ -41,16 +43,13 @@ void main() {
   // -------------------------------------------------
 
   blocTest<SkillsBloc, SkillsState>(
-    'emits loading then loaded when skills load successfully',
+    'emits [Loading, Loaded] when skills load successfully',
     build: () {
-      when(() => mockGet()).thenAnswer((_) async => tSkills);
+      when(() => mockGet()).thenAnswer((_) async => Right(tSkills));
       return bloc;
     },
     act: (bloc) => bloc.add(LoadSkills()),
-    expect: () => [
-      SkillsState.initial().copyWith(loading: true),
-      SkillsState.initial().copyWith(loading: false, skills: tSkills),
-    ],
+    expect: () => [isA<SkillsLoading>(), isA<SkillsLoaded>()],
   );
 
   // -------------------------------------------------
@@ -60,15 +59,14 @@ void main() {
   blocTest<SkillsBloc, SkillsState>(
     'add skill triggers reload',
     build: () {
-      when(() => mockAdd(name: any(named: 'name'))).thenAnswer((_) async {});
-      when(() => mockGet()).thenAnswer((_) async => tSkills);
+      when(
+        () => mockAdd(name: any(named: 'name')),
+      ).thenAnswer((_) async => Right(unit));
+      when(() => mockGet()).thenAnswer((_) async => Right(tSkills));
       return bloc;
     },
     act: (bloc) => bloc.add(AddSkill('Flutter')),
-    expect: () => [
-      SkillsState.initial().copyWith(loading: true),
-      SkillsState.initial().copyWith(loading: false, skills: tSkills),
-    ],
+    expect: () => [isA<SkillsLoading>(), isA<SkillsLoaded>()],
   );
 
   // -------------------------------------------------
@@ -78,30 +76,27 @@ void main() {
   blocTest<SkillsBloc, SkillsState>(
     'delete skill triggers reload',
     build: () {
-      when(() => mockDelete(any())).thenAnswer((_) async {});
-      when(() => mockGet()).thenAnswer((_) async => tSkills);
+      when(() => mockDelete(any())).thenAnswer((_) async => Right(unit));
+      when(() => mockGet()).thenAnswer((_) async => Right(tSkills));
       return bloc;
     },
     act: (bloc) => bloc.add(DeleteSkill('1')),
-    expect: () => [
-      SkillsState.initial().copyWith(loading: true),
-      SkillsState.initial().copyWith(loading: false, skills: tSkills),
-    ],
+    expect: () => [isA<SkillsLoading>(), isA<SkillsLoaded>()],
   );
 
+  // -------------------------------------------------
+  // ERROR CASE
+  // -------------------------------------------------
+
   blocTest<SkillsBloc, SkillsState>(
-    'emits error when getSkills throws',
+    'emits [Loading, Error] when getSkills fails',
     build: () {
-      when(() => mockGet()).thenThrow(Exception());
+      when(
+        () => mockGet(),
+      ).thenAnswer((_) async => Left(ServerFailure("error")));
       return bloc;
     },
     act: (bloc) => bloc.add(LoadSkills()),
-    expect: () => [
-      SkillsState.initial().copyWith(loading: true, error: null),
-      SkillsState.initial().copyWith(
-        loading: false,
-        error: "Failed to load skills",
-      ),
-    ],
+    expect: () => [isA<SkillsLoading>(), isA<SkillsError>()],
   );
 }

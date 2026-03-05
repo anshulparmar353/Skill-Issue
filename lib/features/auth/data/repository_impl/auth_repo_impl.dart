@@ -1,7 +1,7 @@
 import 'dart:async';
-import 'dart:io';
 
 import 'package:dartz/dartz.dart';
+import 'package:skill_issue/core/errors/exceptions.dart';
 import 'package:skill_issue/core/errors/failures.dart';
 import 'package:skill_issue/features/auth/data/datasources/auth_api.dart';
 import 'package:skill_issue/features/auth/data/datasources/register_api.dart';
@@ -35,14 +35,15 @@ class AuthRepoImpl implements AuthRepository {
       return Right(
         AuthResult(user: response.user, isNewUser: response.isNewUser),
       );
-    } on SocketException {
+
+    } on NetworkException {
       return const Left(NetworkFailure("No internet connection"));
-    } on TimeoutException {
-      return const Left(NetworkFailure("Request timed out"));
-    } on SocketDirection catch (e) {
-      return Left(ServerFailure(e as String));
-    } catch (e) {
-      return const Left(UnknownFailure("Something went wrong"));
+    } on InvalidCredentialsException {
+      return const Left(ServerFailure("Invalid credentials"));
+    } on CacheException {
+      return const Left(CacheFailure("Failed to save token"));
+    } catch (_) {
+      return const Left(UnknownFailure("Unexpected error"));
     }
   }
 
@@ -52,14 +53,14 @@ class AuthRepoImpl implements AuthRepository {
       final result = await userApi.getCurrentUser();
 
       return Right(AuthResult(user: result.user, isNewUser: result.isNewUser));
-    } on SocketException {
+    } on NetworkException {
       return const Left(NetworkFailure("No internet connection"));
-    } on TimeoutException {
-      return const Left(NetworkFailure("Request timed out"));
-    } on SocketDirection catch (e) {
-      return Left(ServerFailure(e as String));
-    } catch (e) {
-      return const Left(UnknownFailure("Something went wrong"));
+    } on InvalidCredentialsException {
+      return const Left(ServerFailure("Invalid credentials"));
+    } on CacheException {
+      return const Left(CacheFailure("Failed to save token"));
+    } catch (_) {
+      return const Left(UnknownFailure("Unexpected error"));
     }
   }
 
@@ -84,14 +85,14 @@ class AuthRepoImpl implements AuthRepository {
       return Right(
         AuthResult(user: response.user, isNewUser: response.isNewUser),
       );
-    } on SocketException {
+    } on NetworkException {
       return const Left(NetworkFailure("No internet connection"));
-    } on TimeoutException {
-      return const Left(NetworkFailure("Request timed out"));
-    } on SocketDirection catch (e) {
-      return Left(ServerFailure(e as String));
-    } catch (e) {
-      return const Left(UnknownFailure("Something went wrong"));
+    } on InvalidCredentialsException {
+      return const Left(ServerFailure("Invalid credentials"));
+    } on CacheException {
+      return const Left(CacheFailure("Failed to save token"));
+    } catch (_) {
+      return const Left(UnknownFailure("Unexpected error"));
     }
   }
 
@@ -100,16 +101,16 @@ class AuthRepoImpl implements AuthRepository {
 
     try {
       await tokenStorage.clear();
-    } on SocketException {
+    } on NetworkException {
       return const Left(NetworkFailure("No internet connection"));
-    } on TimeoutException {
-      return const Left(NetworkFailure("Request timed out"));
-    } on SocketDirection catch (e) {
-      return Left(ServerFailure(e as String));
-    } catch (e) {
-      return const Left(UnknownFailure("Something went wrong"));
+    } on InvalidCredentialsException {
+      return const Left(ServerFailure("Invalid credentials"));
+    } on CacheException {
+      return const Left(CacheFailure("Failed to save token"));
+    } catch (_) {
+      return const Left(UnknownFailure("Unexpected error"));
     }
 
-    throw Exception("Logout Failed");
+    throw Exception("Logout");
   }
 }
