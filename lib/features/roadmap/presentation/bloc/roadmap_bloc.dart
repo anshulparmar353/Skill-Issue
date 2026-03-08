@@ -5,34 +5,25 @@ import 'roadmap_event.dart';
 import 'roadmap_state.dart';
 
 class RoadmapBloc extends Bloc<RoadmapEvent, RoadmapState> {
-
   final GetRoadmapUseCase getRoadmap;
 
-  RoadmapBloc(this.getRoadmap)
-      : super(RoadmapState.initial()) {
-
+  RoadmapBloc(this.getRoadmap) : super(RoadmapInitial()) {
     on<LoadRoadmap>(_load);
   }
 
-  Future<void> _load(LoadRoadmap event, emit) async {
-
-    emit(state.copyWith(loading: true, error: null));
+  Future<void> _load(LoadRoadmap event,Emitter<RoadmapState> emit) async {
+    emit(RoadmapLoading());
 
     try {
+      final result = await getRoadmap(event.roleId);
 
-      final roadmap = await getRoadmap();
-
-      emit(state.copyWith(
-        loading: false,
-        roadmap: roadmap,
-      ));
+      result.fold(
+        (failure) => emit(RoadmapError(failure.message)),
+        (roadmap) => emit(RoadmapLoaded(roadmap)),
+      );
 
     } catch (e) {
-
-      emit(state.copyWith(
-        loading: false,
-        error: "Failed to load roadmap",
-      ));
+      emit(RoadmapError("Failed to load Roadmap"));
     }
   }
 }

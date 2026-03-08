@@ -56,7 +56,17 @@ class SkillsPage extends StatelessWidget {
           }
 
           if (state is SkillsError) {
-            return Center(child: Text(state.message));
+            return Column(
+              children: [
+                Text(state.message),
+                ElevatedButton(
+                  onPressed: () {
+                    context.read<SkillsBloc>().add(LoadSkills());
+                  },
+                  child: Text("Retry"),
+                ),
+              ],
+            );
           }
 
           if (state is SkillsLoaded) {

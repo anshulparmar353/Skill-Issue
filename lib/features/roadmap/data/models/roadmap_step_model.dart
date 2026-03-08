@@ -1,19 +1,17 @@
 import '../../domain/entities/roadmap_step.dart';
 
 class RoadmapStepModel extends RoadmapStep {
-
   RoadmapStepModel({
-    required super.id,
     required super.title,
     required super.completed,
+    required super.description,
   });
 
   factory RoadmapStepModel.fromJson(Map<String, dynamic> json) {
-
     return RoadmapStepModel(
-      id: json["id"].toString(),
       title: json["title"] ?? "",
       completed: json["completed"] ?? false,
+      description: json["description"] ?? "",
     );
   }
 }

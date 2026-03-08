@@ -1,3 +1,4 @@
+
 class ApiEndpoints {
 
   static const baseUrl = "http://YOUR_FASTAPI_URL";
@@ -12,7 +13,10 @@ class ApiEndpoints {
 
   /// Skills
   static const skills = "/skills";
+  
+  /// Dashboard
+  static const dashboard = "/dashboard";
 
   /// Analysis
-  static const skillGap = "/analysis/skill-gap";
+  static const roadmap = "/roadmap";
 }

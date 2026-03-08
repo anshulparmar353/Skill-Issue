@@ -1,6 +1,8 @@
+import 'package:dartz/dartz.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:bloc_test/bloc_test.dart';
 import 'package:mocktail/mocktail.dart';
+import 'package:skill_issue/core/errors/failures.dart';
 import 'package:skill_issue/features/roadmap/domain/entities/roadmap_step.dart';
 
 import 'package:skill_issue/features/roadmap/presentation/bloc/roadmap_bloc.dart';
@@ -23,8 +25,12 @@ void main() {
   final tRoadmap = Roadmap(
     role: "App Dev",
     steps: [
-      RoadmapStep(id: '1', title: 'Learn Dart', completed: true),
-      RoadmapStep(id: '2', title: 'Learn Flutter', completed: true),
+      RoadmapStep(title: 'Learn Dart', description: "dart", completed: true),
+      RoadmapStep(
+        title: 'Learn Flutter',
+        description: "flutter",
+        completed: true,
+      ),
     ],
     completion: 40,
   );
@@ -36,14 +42,13 @@ void main() {
   blocTest<RoadmapBloc, RoadmapState>(
     'emits loading then loaded when roadmap loads successfully',
     build: () {
-      when(() => mockUseCase()).thenAnswer((_) async => tRoadmap);
+      when(
+        () => mockUseCase("flutter"),
+      ).thenAnswer((_) async => Right(tRoadmap));
       return bloc;
     },
-    act: (bloc) => bloc.add(LoadRoadmap()),
-    expect: () => [
-      RoadmapState.initial().copyWith(loading: true),
-      RoadmapState.initial().copyWith(loading: false, roadmap: tRoadmap),
-    ],
+    act: (bloc) => bloc.add(LoadRoadmap("flutter")),
+    expect: () => [RoadmapLoading(), RoadmapLoaded(tRoadmap)],
   );
 
   // -------------------------------------------------
@@ -53,33 +58,24 @@ void main() {
   blocTest<RoadmapBloc, RoadmapState>(
     'emits loading then error when roadmap fails',
     build: () {
-      when(() => mockUseCase()).thenThrow(Exception());
+      when(() => mockUseCase("flutter")).thenAnswer(
+        (_) async => const Left(ServerFailure("Failed to load Roadmap")),
+      );
       return bloc;
     },
-    act: (bloc) => bloc.add(LoadRoadmap()),
-    expect: () => [
-      RoadmapState.initial().copyWith(loading: true),
-      RoadmapState.initial().copyWith(
-        loading: false,
-        error: "Failed to load roadmap",
-      ),
-    ],
+    act: (bloc) => bloc.add(LoadRoadmap("flutter")),
+    expect: () => [RoadmapLoading(), RoadmapError("Failed to load Roadmap")],
   );
 
   blocTest<RoadmapBloc, RoadmapState>(
     'emits error when getRoadmap throws',
     build: () {
-      when(() => mockUseCase()).thenThrow(Exception());
+      when(() => mockUseCase("flutter")).thenAnswer(
+        (_) async => const Left(ServerFailure("Failed to load Roadmap")),
+      );
       return bloc;
     },
-    act: (bloc) => bloc.add(LoadRoadmap()),
-    expect: () => [
-      RoadmapState.initial().copyWith(loading: true, error: null),
-      RoadmapState.initial().copyWith(
-        loading: false,
-        error: "Failed to load roadmap",
-      ),
-    ],
+    act: (bloc) => bloc.add(LoadRoadmap("flutter")),
+    expect: () => [RoadmapLoading(), RoadmapError("Failed to load Roadmap")],
   );
-  
 }

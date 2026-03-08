@@ -1,12 +1,11 @@
 class RoadmapStep {
-
-  final String id;
   final String title;
+  final String description;
   final bool completed;
 
   RoadmapStep({
-    required this.id,
     required this.title,
+    required this.description,
     required this.completed,
   });
 }

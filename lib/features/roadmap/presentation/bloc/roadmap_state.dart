@@ -1,33 +1,29 @@
 import 'package:equatable/equatable.dart';
+import 'package:skill_issue/features/roadmap/domain/entities/roadmap.dart';
 
-import '../../domain/entities/roadmap.dart';
+abstract class RoadmapState with EquatableMixin {
+  @override
+  List<Object?> get props => [];
+}
 
-class RoadmapState extends Equatable {
+class RoadmapInitial extends RoadmapState {}
 
-  final bool loading;
-  final Roadmap? roadmap;
-  final String? error;
+class RoadmapLoading extends RoadmapState {}
 
-  const RoadmapState({
-    required this.loading,
-    this.roadmap,
-    this.error,
-  });
+class RoadmapLoaded extends RoadmapState {
+  final Roadmap roadmap;
 
-  factory RoadmapState.initial() => RoadmapState(loading: false);
+  RoadmapLoaded(this.roadmap);
+  
+  @override
+  List<Object?> get props => [roadmap];
+}
 
-  RoadmapState copyWith({
-    bool? loading,
-    Roadmap? roadmap,
-    String? error,
-  }) {
-    return RoadmapState(
-      loading: loading ?? this.loading,
-      roadmap: roadmap ?? this.roadmap,
-      error: error,
-    );
-  }
+class RoadmapError extends RoadmapState {
+  final String message;
+
+  RoadmapError(this.message);
 
   @override
-  List<Object?> get props => [loading, roadmap, error];
+  List<Object?> get props => [message];
 }

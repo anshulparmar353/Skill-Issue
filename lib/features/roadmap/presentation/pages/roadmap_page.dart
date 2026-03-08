@@ -36,6 +36,7 @@ class RoadmapPage extends StatelessWidget {
                     step.completed ? Icons.check_circle : Icons.circle_outlined,
                   ),
                   title: Text(step.title),
+                  subtitle: Text(step.description),
                 );
               },
             ),
@@ -49,21 +50,20 @@ class RoadmapPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<RoadmapBloc, RoadmapState>(
       builder: (context, state) {
-        if (state.loading) {
+        if (state is RoadmapLoading) {
           return const Center(child: CircularProgressIndicator());
         }
 
-        if (state.error != null) {
-          return Center(child: Text(state.error!));
+        if (state is RoadmapError) {
+          return Center(child: Text(state.message));
         }
 
-        final roadmap = state.roadmap;
-
-        if (roadmap == null) {
-          return const Center(child: Text("No Roadmap Found"));
+        if (state is RoadmapLoaded) {
+          final roadmap = state.roadmap;
+          return _buildRoadmap(roadmap);
         }
 
-        return _buildRoadmap(roadmap);
+        return const SizedBox();
       },
     );
   }

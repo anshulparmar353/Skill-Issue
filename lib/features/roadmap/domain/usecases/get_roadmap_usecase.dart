@@ -1,6 +1,8 @@
+import 'package:dartz/dartz.dart';
+import 'package:skill_issue/core/errors/failures.dart';
+import 'package:skill_issue/features/roadmap/domain/entities/roadmap.dart';
 import 'package:skill_issue/features/roadmap/domain/repository/roadmap_repo.dart';
 
-import '../entities/roadmap.dart';
 
 class GetRoadmapUseCase {
 
@@ -8,7 +10,7 @@ class GetRoadmapUseCase {
 
   GetRoadmapUseCase(this.repo);
 
-  Future<Roadmap> call() {
-    return repo.getRoadmap();
+  Future<Either<Failure, Roadmap>> call(String roleId) {
+    return repo.getRoadmap(roleId);
   }
 }

@@ -80,7 +80,7 @@ Future<void> init() async {
 
   getIt.registerLazySingleton(() => SkillsApi(getIt()));
 
-  getIt.registerLazySingleton<SkillsRepository>(() => SkillsRepoImpl(getIt()));
+  getIt.registerLazySingleton<SkillsRepository>(() => SkillsRepoImpl(getIt(),getIt(),getIt()));
 
   getIt.registerLazySingleton(() => GetSkillsUseCase(getIt()));
 
@@ -92,7 +92,7 @@ Future<void> init() async {
   getIt.registerLazySingleton(() => RoadmapApi(getIt()));
 
   getIt.registerLazySingleton<RoadmapRepository>(
-    () => RoadmapRepoImpl(getIt()),
+    () => RoadmapRepoImpl(getIt(),getIt()),
   );
 
   getIt.registerLazySingleton(() => GetRoadmapUseCase(getIt()));

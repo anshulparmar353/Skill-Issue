@@ -2,6 +2,7 @@ import 'package:dartz/dartz.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:bloc_test/bloc_test.dart';
 import 'package:mocktail/mocktail.dart';
+import 'package:skill_issue/core/analytics/analytics_service.dart';
 import 'package:skill_issue/core/errors/failures.dart';
 import 'package:skill_issue/features/add_skills/domain/entities/skill_level.dart';
 
@@ -19,18 +20,22 @@ class MockAddSkillUseCase extends Mock implements AddSkillUseCase {}
 
 class MockDeleteSkillUseCase extends Mock implements DeleteSkillUseCase {}
 
+class MockAnalyticsService extends Mock implements AnalyticsService {}
+
 void main() {
   late SkillsBloc bloc;
   late MockGetSkillsUseCase mockGet;
   late MockAddSkillUseCase mockAdd;
   late MockDeleteSkillUseCase mockDelete;
+  late MockAnalyticsService mockAnalytics;
 
   setUp(() {
     mockGet = MockGetSkillsUseCase();
     mockAdd = MockAddSkillUseCase();
     mockDelete = MockDeleteSkillUseCase();
+    mockAnalytics = MockAnalyticsService();
 
-    bloc = SkillsBloc(mockGet, mockAdd, mockDelete);
+    bloc = SkillsBloc(mockGet, mockAdd, mockDelete, mockAnalytics);
   });
 
   final tSkills = [

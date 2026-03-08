@@ -1,5 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:skill_issue/core/errors/exceptions.dart';
+import 'package:skill_issue/core/network/api_endpoints.dart';
 
 import '../../../../core/network/dio_client.dart';
 import '../models/skill_model.dart';
@@ -11,7 +12,7 @@ class SkillsApi {
 
   Future<List<SkillModel>> getSkills() async {
     try {
-      final res = await dio.dio.get("/users/skills");
+      final res = await dio.dio.get(ApiEndpoints.skills);
       
       return (res.data as List).map((e) => SkillModel.fromJson(e)).toList();
     } on DioException catch (e) {

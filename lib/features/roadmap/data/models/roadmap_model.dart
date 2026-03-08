@@ -14,7 +14,7 @@ class RoadmapModel extends Roadmap {
     return RoadmapModel(
       role: json["role"] ?? "",
       completion: json["completion"] ?? 0,
-      steps: (json["steps"] as List)
+      steps: (json["steps"] as List? ?? [])
           .map((e) => RoadmapStepModel.fromJson(e))
           .toList(),
     );
