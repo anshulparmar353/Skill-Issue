@@ -1,38 +1,52 @@
+import 'package:equatable/equatable.dart';
 import 'package:skill_issue/features/quiz/domain/entities/quiz_question.dart';
+import 'package:skill_issue/features/quiz/domain/entities/quiz_result.dart';
 
-class QuizState {
+abstract class QuizState with EquatableMixin {
+  @override
+  List<Object?> get props => [];
+}
 
+class QuizInitial extends QuizState {}
+
+class QuizLoading extends QuizState {}
+
+class QuizLoaded extends QuizState {
   final List<QuizQuestion> questions;
   final Map<String, String> answers;
-  final bool loading;
-  final bool submitted;
 
-  QuizState({
-    required this.questions,
-    required this.answers,
-    required this.loading,
-    required this.submitted,
-  });
+  QuizLoaded(this.questions, this.answers);
 
-  factory QuizState.initial() =>
-      QuizState(
-        questions: [],
-        answers: {},
-        loading: false,
-        submitted: false,
-      );
+  @override
+  List<Object?> get props => [questions, answers];
+}
 
-  QuizState copyWith({
-    List<QuizQuestion>? questions,
-    Map<String, String>? answers,
-    bool? loading,
-    bool? submitted,
-  }) {
-    return QuizState(
-      questions: questions ?? this.questions,
-      answers: answers ?? this.answers,
-      loading: loading ?? this.loading,
-      submitted: submitted ?? this.submitted,
-    );
-  }
+class QuizSubmitting extends QuizState {}
+
+class QuizSubmitted extends QuizState {
+  final QuizResult result;
+
+  QuizSubmitted(this.result);
+
+  @override
+  List<Object?> get props => [result];
+}
+
+class QuizAnswerUpdated extends QuizState {
+  final List<QuizQuestion> questions;
+  final Map<String, String> answers;
+
+  QuizAnswerUpdated(this.questions, this.answers);
+
+  @override
+  List<Object?> get props => [questions, answers];
+}
+
+class QuizError extends QuizState {
+  final String message;
+
+  QuizError(this.message);
+
+  @override
+  List<Object?> get props => [message];
 }

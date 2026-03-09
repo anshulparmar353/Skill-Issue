@@ -1,6 +1,8 @@
+import 'package:dartz/dartz.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:bloc_test/bloc_test.dart';
 import 'package:mocktail/mocktail.dart';
+import 'package:skill_issue/core/errors/failures.dart';
 
 import 'package:skill_issue/features/profile/presentation/bloc/profile_bloc.dart';
 import 'package:skill_issue/features/profile/presentation/bloc/profile_event.dart';
@@ -10,6 +12,7 @@ import 'package:skill_issue/features/profile/domain/usecases/update_profile_usec
 import 'package:skill_issue/features/profile/domain/entities/profile.dart';
 
 class MockGetProfileUseCase extends Mock implements GetProfileUseCase {}
+
 class MockUpdateProfileUseCase extends Mock implements UpdateProfileUseCase {}
 
 void main() {
@@ -23,11 +26,7 @@ void main() {
     bloc = ProfileBloc(mockGet, mockUpdate);
   });
 
-  final tProfile = Profile(
-    id: '1',
-    name: 'Anshul',
-    email: 'test@gmail.com',
-  );
+  final tProfile = Profile(id: '1', name: 'Anshul', email: 'test@gmail.com');
 
   // -------------------------------------------------
   // LOAD PROFILE SUCCESS
@@ -36,17 +35,11 @@ void main() {
   blocTest<ProfileBloc, ProfileState>(
     'emits loading then loaded when profile loads',
     build: () {
-      when(() => mockGet()).thenAnswer((_) async => tProfile);
+      when(() => mockGet()).thenAnswer((_) async => Right(tProfile));
       return bloc;
     },
     act: (bloc) => bloc.add(LoadProfile()),
-    expect: () => [
-      ProfileState(loading: true),
-      ProfileState(
-        loading: false,
-        profile: tProfile,
-      ),
-    ],
+    expect: () => [ProfileLoading(), ProfileLoaded(tProfile)],
   );
 
   // -------------------------------------------------
@@ -56,56 +49,36 @@ void main() {
   blocTest<ProfileBloc, ProfileState>(
     'emits loading then updated state when profile name updated',
     build: () {
-      when(() => mockUpdate(name: any(named: 'name')))
-          .thenAnswer((_) async => tProfile);
+      when(
+        () => mockUpdate(name: any(named: 'name')),
+      ).thenAnswer((_) async => Right(tProfile));
       return bloc;
     },
     act: (bloc) => bloc.add(UpdateProfileName('New Name')),
-    expect: () => [
-      ProfileState(loading: true),
-      ProfileState(
-        loading: false,
-        profile: tProfile,
-        updated: true,
-      ),
-    ],
+    expect: () => [ProfileLoading(), ProfileUpdate(tProfile)],
   );
 
   blocTest<ProfileBloc, ProfileState>(
     'emits error when getProfile throws',
     build: () {
-      when(() => mockGet()).thenThrow(Exception());
+      when(
+        () => mockGet(),
+      ).thenAnswer((_) async => Left(ServerFailure("Failed to Get Profile")));
       return bloc;
     },
     act: (bloc) => bloc.add(LoadProfile()),
-    expect: () => [
-      ProfileState.initial().copyWith(loading: true, error: null),
-      ProfileState.initial().copyWith(
-        loading: false,
-        error: "Failed to load profile",
-      ),
-    ],
+    expect: () => [ProfileLoading(), ProfileError("Failed to Get Profile")],
   );
 
   blocTest<ProfileBloc, ProfileState>(
     'emits error when updateProfile throws',
     build: () {
-      when(() => mockUpdate(name: any(named: 'name')))
-          .thenThrow(Exception());
+      when(
+        () => mockUpdate(name: any(named: 'name')),
+      ).thenAnswer((_) async => Left(ServerFailure("Failed to Update Profile")));
       return bloc;
     },
     act: (bloc) => bloc.add(UpdateProfileName('New Name')),
-    expect: () => [
-      ProfileState.initial().copyWith(
-        loading: true,
-        error: null,
-        updated: false,
-      ),
-      ProfileState.initial().copyWith(
-        loading: false,
-        error: "Failed to update profile",
-      ),
-    ],
+    expect: () => [ProfileLoading(), ProfileError("Failed to Update Profile")],
   );
-
 }

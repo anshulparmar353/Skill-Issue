@@ -71,7 +71,7 @@ Future<void> init() async {
   getIt.registerLazySingleton(() => DashboardApi(getIt()));
 
   getIt.registerLazySingleton<DashboardRepository>(
-    () => DashboardRepoImpl(getIt()),
+    () => DashboardRepoImpl(getIt(),getIt()),
   );
 
   getIt.registerLazySingleton(() => GetDashboardDataUseCase(getIt()));

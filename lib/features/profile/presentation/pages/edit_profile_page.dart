@@ -5,20 +5,15 @@ import 'package:skill_issue/features/profile/presentation/bloc/profile_event.dar
 import 'package:skill_issue/features/profile/presentation/bloc/profile_state.dart';
 
 class EditProfilePage extends StatefulWidget {
-
   final String currentName;
 
-  const EditProfilePage({
-    super.key,
-    required this.currentName,
-  });
+  const EditProfilePage({super.key, required this.currentName});
 
   @override
   State<EditProfilePage> createState() => _EditProfilePageState();
 }
 
 class _EditProfilePageState extends State<EditProfilePage> {
-
   late TextEditingController nameController;
 
   @override
@@ -35,7 +30,6 @@ class _EditProfilePageState extends State<EditProfilePage> {
   }
 
   void _save() {
-
     final name = nameController.text.trim();
 
     if (name.isEmpty) return;
@@ -45,59 +39,59 @@ class _EditProfilePageState extends State<EditProfilePage> {
 
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
-
-      appBar: AppBar(
-        title: const Text("Edit Profile"),
-      ),
+      appBar: AppBar(title: const Text("Edit Profile")),
 
       body: BlocConsumer<ProfileBloc, ProfileState>(
-
         listener: (context, state) {
-
-          if (state.updated) {
-
-            ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(
-                content: Text("Profile Updated"),
-              ),
-            );
+          if (state is ProfileUpdate) {
+            ScaffoldMessenger.of(
+              context,
+            ).showSnackBar(const SnackBar(content: Text("Profile Updated")));
 
             Navigator.pop(context);
           }
         },
 
         builder: (context, state) {
+          if (state is ProfileLoading) {
+            return const Center(child: CircularProgressIndicator());
+          }
 
-          return Padding(
+          if (state is ProfileError) {
+            return const Center(child: Text("No Profile"));
+          }
 
-            padding: const EdgeInsets.all(20),
+          if (state is ProfileLoaded) {
 
-            child: Column(
+            return Padding(
+              padding: const EdgeInsets.all(20),
 
-              children: [
-
-                TextField(
-                  controller: nameController,
-                  decoration: const InputDecoration(
-                    labelText: "Name",
-                    border: OutlineInputBorder(),
+              child: Column(
+                children: [
+                  TextField(
+                    controller: nameController,
+                    decoration: const InputDecoration(
+                      labelText: "Name",
+                      border: OutlineInputBorder(),
+                    ),
                   ),
-                ),
 
-                const SizedBox(height: 24),
+                  const SizedBox(height: 24),
 
-                ElevatedButton(
-                  onPressed: state.loading ? null : _save,
+                  ElevatedButton(
+                    onPressed: state is ProfileLoading ? null : _save,
 
-                  child: state.loading
-                      ? const CircularProgressIndicator()
-                      : const Text("Save"),
-                ),
-              ],
-            ),
-          );
+                    child: state is ProfileLoading
+                        ? const CircularProgressIndicator()
+                        : const Text("Save"),
+                  ),
+                ],
+              ),
+            );
+          }
+
+          return const SizedBox();
         },
       ),
     );

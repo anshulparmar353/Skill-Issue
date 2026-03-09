@@ -5,51 +5,41 @@ import 'package:skill_issue/features/profile/presentation/bloc/profile_event.dar
 import 'package:skill_issue/features/profile/presentation/bloc/profile_state.dart';
 
 class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
-
   final GetProfileUseCase getProfile;
   final UpdateProfileUseCase updateProfile;
 
-  ProfileBloc(this.getProfile, this.updateProfile)
-      : super(ProfileState.initial()) {
-
+  ProfileBloc(this.getProfile, this.updateProfile) : super(ProfileInitial()) {
     on<LoadProfile>(_load);
     on<UpdateProfileName>(_update);
   }
 
   Future<void> _load(LoadProfile event, emit) async {
-
-    emit(ProfileState(loading: true));
+    emit(ProfileLoading());
 
     try {
-      final profile = await getProfile();
-      emit(state.copyWith(
-        loading: false,
-        profile: profile,
-      ));
+      final result = await getProfile();
+
+      result.fold(
+        (failure) => emit(ProfileError(failure.message)),
+        (profile) => emit(ProfileLoaded(profile)),
+      );
     } catch (e) {
-      emit(state.copyWith(
-        loading: false,
-        error: "Failed to load profile",
-      ));
+      emit(ProfileError("Failed to load profile"));
     }
   }
 
   Future<void> _update(UpdateProfileName event, emit) async {
-
-    emit(ProfileState(loading: true));
+    emit(ProfileLoading());
 
     try {
-      final profile = await updateProfile(name: event.name);
-      emit(state.copyWith(
-        loading: false,
-        profile: profile,
-        updated: true,
-      ));
+      final result = await updateProfile(name: event.name);
+
+      result.fold(
+        (failure) => emit(ProfileError(failure.message)),
+        (update) => emit(ProfileUpdate(update)),
+      );
     } catch (e) {
-      emit(state.copyWith(
-        loading: false,
-        error: "Failed to update profile",
-      ));
+      emit(ProfileError("Failed to update profile"));
     }
   }
 }

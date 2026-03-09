@@ -4,34 +4,20 @@ import 'package:skill_issue/features/dashboard/presentation/bloc/dashboard_event
 import 'package:skill_issue/features/dashboard/presentation/bloc/dashboard_state.dart';
 
 class DashboardBloc extends Bloc<DashboardEvent, DashboardState> {
-
   final GetDashboardDataUseCase getDashboard;
 
-  DashboardBloc(this.getDashboard)
-      : super(DashboardState.initial()) {
-
+  DashboardBloc(this.getDashboard) : super(DashboardInitial()) {
     on<LoadDashboard>(_load);
   }
 
   Future<void> _load(LoadDashboard event, emit) async {
+    emit(DashboardLoading());
 
-    emit(DashboardState(loading: true, error: null));
+    final result = await getDashboard();
 
-    try {
-
-      final data = await getDashboard();
-
-      emit(state.copyWith(
-        loading: false,
-        data: data,
-      ));
-
-    } catch (e) {
-
-      emit(state.copyWith(
-        loading: false,
-        error: "Failed to load dashboard",
-      ));
-    }
+    result.fold(
+      (failure) => emit(DashboardError(failure.message)),
+      (data) => emit(DashboardLoaded(data)),
+    );
   }
 }

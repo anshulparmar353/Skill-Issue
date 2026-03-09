@@ -5,6 +5,7 @@ import 'package:skill_issue/core/routes/app_go_router.dart';
 import 'package:skill_issue/features/multi_quiz/presentation/bloc/multi_quiz_bloc.dart';
 import 'package:skill_issue/features/multi_quiz/presentation/bloc/multi_quiz_event.dart';
 import 'package:skill_issue/features/multi_quiz/presentation/bloc/multi_quiz_state.dart';
+import 'package:skill_issue/features/quiz/domain/entities/quiz_question.dart';
 import 'package:skill_issue/features/quiz/presentation/bloc/quiz_bloc.dart';
 import 'package:skill_issue/features/quiz/presentation/bloc/quiz_event.dart';
 import 'package:skill_issue/features/quiz/presentation/bloc/quiz_state.dart';
@@ -44,45 +45,87 @@ class _QuizPageState extends State<QuizPage> {
     );
   }
 
-  Widget _buildQuestions(QuizState state) {
-    return ListView.builder(
-      itemCount: state.questions.length,
-      itemBuilder: (_, index) {
-        final q = state.questions[index];
+  Widget _buildQuestions(
+    List<QuizQuestion> questions,
+    Map<String, String> answers,
+  ) {
+    return Padding(
+      padding: const EdgeInsets.all(16),
+      child: ListView.builder(
+        itemCount: questions.length,
+        itemBuilder: (_, index) {
+          final q = questions[index];
 
-        return Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(q.question),
+          return Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const SizedBox(height: 12),
 
-            ...q.options.map((option) {
-              return RadioListTile(
-                value: option,
-                groupValue: state.answers[q.id],
-                onChanged: (value) {
-                  context.read<QuizBloc>().add(AnswerQuestion(q.id, value!));
-                },
-                title: Text(option),
-              );
-            }),
-          ],
-        );
-      },
+              Text(
+                q.question,
+                style: const TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+
+              const SizedBox(height: 8),
+
+              ...q.options.map((option) {
+                return RadioListTile(
+                  key: ValueKey(option),
+                  value: option,
+                  groupValue: answers[q.id],
+                  onChanged: (value) {
+                    context.read<QuizBloc>().add(AnswerQuestion(q.id, value!));
+                  },
+                  title: Text(option),
+                );
+              }),
+            ],
+          );
+        },
+      ),
     );
   }
 
   Widget _buildSubmitButton() {
-    return ElevatedButton(
-      onPressed: () {
-        final flowState = context.read<MultiQuizBloc>().state;
-        final quizState = context.read<QuizBloc>().state;
+    return BlocBuilder<QuizBloc, QuizState>(
+      builder: (context, state) {
+        late Map<String,String> answers;
+        late List<QuizQuestion> questions;
 
-        context.read<QuizBloc>().add(
-          SubmitQuiz(flowState.currentSkillId, quizState.answers),
-        );
+        if (state is QuizLoaded || state is QuizAnswerUpdated) {
+          if (state is QuizLoaded) {
+            answers= state.answers;
+            questions = state.questions;
+          }
+
+          if (state is QuizAnswerUpdated) {
+            answers = state.answers;
+            questions = state.questions;
+          }
+
+          final isComplete = questions.every((q) => answers.containsKey(q.id));
+
+          return Padding(
+            padding: const EdgeInsets.all(16),
+            child: ElevatedButton(
+              onPressed: isComplete
+                  ? () {
+                      final flowState = context.read<MultiQuizBloc>().state;
+
+                      context.read<QuizBloc>().add(
+                        SubmitQuiz(flowState.currentSkillId, answers),
+                      );
+                    }
+                  : null,
+              child: const Text("Submit"),
+            ),
+          );
+        }
+        return const SizedBox();
       },
-
-      child: const Text("Submit"),
     );
   }
 
@@ -101,8 +144,10 @@ class _QuizPageState extends State<QuizPage> {
 
           BlocListener<QuizBloc, QuizState>(
             listener: (context, quizState) {
-              if (quizState.submitted) {
+              if (quizState is QuizSubmitted) {
                 context.read<MultiQuizBloc>().add(QuizCompletedForSkill());
+
+                _loadQuizForCurrentSkill();
               }
             },
           ),
@@ -115,11 +160,23 @@ class _QuizPageState extends State<QuizPage> {
             Expanded(
               child: BlocBuilder<QuizBloc, QuizState>(
                 builder: (context, state) {
-                  if (state.loading) {
+                  if (state is QuizLoading) {
                     return const Center(child: CircularProgressIndicator());
                   }
 
-                  return _buildQuestions(state);
+                  if (state is QuizError) {
+                    return const Center(child: Text("Failed to load"));
+                  }
+
+                  if (state is QuizLoaded) {
+                    return _buildQuestions(state.questions, state.answers);
+                  }
+
+                  if (state is QuizAnswerUpdated) {
+                    return _buildQuestions(state.questions, state.answers);
+                  }
+
+                  return const SizedBox();
                 },
               ),
             ),

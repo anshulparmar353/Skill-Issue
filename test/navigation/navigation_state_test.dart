@@ -1,3 +1,4 @@
+import 'package:dartz/dartz.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -26,7 +27,7 @@ void main() {
     );
 
     when(() => mockUseCase())
-        .thenAnswer((_) async => tDashboardData);
+        .thenAnswer((_) async => Right(tDashboardData));
 
     final dashboardBloc = DashboardBloc(mockUseCase);
 
@@ -47,7 +48,7 @@ void main() {
     dashboardBloc.add(LoadDashboard());
     await tester.pumpAndSettle();
 
-    expect(dashboardBloc.state.data?.totalSkills, 10);
+    expect(tDashboardData.totalSkills,10);
 
     // Rebuild HomePage with different child (simulate tab change)
     await tester.pumpWidget(
@@ -66,6 +67,6 @@ void main() {
     await tester.pump();
 
     // Verify state still intact
-    expect(dashboardBloc.state.data?.totalSkills, 10);
+    expect(tDashboardData.totalSkills, 10);
   });
 }

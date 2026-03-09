@@ -12,9 +12,7 @@ class QuizQuestionModel extends QuizQuestion {
 
     return QuizQuestionModel(
       id: json["id"].toString(),
-
       question: json["question"] ?? "",
-
       options: (json["options"] as List<dynamic>)
           .map((op) => op.toString())
           .toList(),

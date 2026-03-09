@@ -10,27 +10,31 @@ class DashboardPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<DashboardBloc, DashboardState>(
       builder: (context, state) {
-        if (state.loading) {
+        if (state is DashboardLoading) {
           return const Center(child: CircularProgressIndicator());
         }
 
-        if (state.data == null) {
+        if (state is DashboardInitial) {
           return const Center(child: Text("No Data"));
         }
 
-        final data = state.data!;
+        if (state is DashboardLoaded) {
+          final data = state.data;
 
-        return Column(
-          children: [
-            Text("Total Skills: ${data.totalSkills}"),
+          return Column(
+            children: [
+              Text("Total Skills: ${data.totalSkills}"),
 
-            Text("Beginner: ${data.beginner}"),
-            Text("Intermediate: ${data.intermediate}"),
-            Text("Advanced: ${data.advanced}"),
+              Text("Beginner: ${data.beginner}"),
+              Text("Intermediate: ${data.intermediate}"),
+              Text("Advanced: ${data.advanced}"),
 
-            Text("Roadmap Progress: ${data.roadmapCompletion}%"),
-          ],
-        );
+              Text("Roadmap Progress: ${data.roadmapCompletion}%"),
+            ],
+          );
+        }
+
+        return const SizedBox();
       },
     );
   }

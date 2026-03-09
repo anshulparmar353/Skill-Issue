@@ -1,6 +1,6 @@
 import 'package:equatable/equatable.dart';
 
-class DashboardData extends Equatable{
+class DashboardData extends Equatable {
 
   final int totalSkills;
   final int beginner;

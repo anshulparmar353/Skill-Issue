@@ -9,41 +9,48 @@ import 'package:skill_issue/features/profile/presentation/bloc/profile_state.dar
 
 class ProfilePage extends StatelessWidget {
   const ProfilePage({super.key});
-  
+
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<ProfileBloc, ProfileState>(
       builder: (context, state) {
-        if (state.loading) {
+        if (state is ProfileLoading) {
           return const Center(child: CircularProgressIndicator());
         }
 
-        final profile = state.profile;
-
-        if (profile == null) {
+        if (state is ProfileError) {
           return const Text("No Profile");
         }
 
-        return Column(
-          children: [
-            ElevatedButton(
-              onPressed: () {
-                context.push(AppRoutes.profileEditScreen, extra: profile.name);
-              },
-              child: const Text("Edit Profile"),
-            ),
+        if (state is ProfileLoaded) {
+          final profile = state.profile;
 
-            Text(profile.name),
-            Text(profile.email),
+          return Column(
+            children: [
+              ElevatedButton(
+                onPressed: () {
+                  context.push(
+                    AppRoutes.profileEditScreen,
+                    extra: profile.name,
+                  );
+                },
+                child: const Text("Edit Profile"),
+              ),
 
-            ElevatedButton(
-              onPressed: () {
-                context.read<AuthBloc>().add(LogoutRequested());
-              },
-              child: const Text("Logout"),
-            ),
-          ],
-        );
+              Text(profile.name),
+              Text(profile.email),
+
+              ElevatedButton(
+                onPressed: () {
+                  context.read<AuthBloc>().add(LogoutRequested());
+                },
+                child: const Text("Logout"),
+              ),
+            ],
+          );
+        }
+
+        return const SizedBox();
       },
     );
   }

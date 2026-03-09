@@ -1,10 +1,12 @@
+import 'package:dartz/dartz.dart';
+import 'package:skill_issue/core/errors/failures.dart';
 import 'package:skill_issue/features/profile/domain/entities/profile.dart';
 
 abstract class ProfileRepository {
 
-  Future<Profile> getProfile();
+  Future<Either<Failure, Profile>> getProfile();
 
-  Future<Profile> updateProfile({
+  Future<Either<Failure, Profile>> updateProfile({
     required String name,
   });
 }
